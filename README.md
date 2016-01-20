@@ -13,14 +13,65 @@ Interact with the WebHooker.io API
 
 Via Composer
 
-``` bash
-$ composer require webhooker/webhooker-sdk
+```bash
+composer require webhooker/webhooker-sdk
+```
+
+You must also have Guzzle installed. By default, the package is only compatible with Guzzle 6:
+
+```bash
+composer require guzzlehttp/guzzle
 ```
 
 ## Usage
 
-``` php
-$webhooker->notify('account-1', 'something.happened')->json(['foo' => 'bar'])->send();
+Instantiate:
+
+```php
+$webhooker = Webhooker\Webhooker::usingGuzzle('YOUR-API-KEY');
+```
+
+Add a subscriber:
+
+```php
+$subscriber = $webhooker->addSubscriber('Their Name Here');
+
+$subscriber->id;
+```
+
+Add an endpoint for the subscriber to receive messages:
+
+```php
+// you can use "receiveJson" or "receiveXml"
+$subscription = $webhooker->subscriber($id)->receiveJson($tenantKey, $deliveryUrl, $secret);
+
+$subscription->id;
+```
+
+Send a JSON message:
+
+```php
+// $jsonData can be something JSON-able (array/object) or a pre-encoded JSON string
+$webhooker->notify('account-1', 'something.happened')->json($jsonData)->send();
+```
+
+Or, because JSON is very common, just pass it directly to the `send()` method:
+
+```php
+$webhooker->notify('account-1', 'something.happened')->send($jsonData);
+```
+
+Send an XML message:
+
+```
+// $xmlData must be an XML string
+$webhooker->notify('account-1', 'something.happened')->xml($xmlData)->send();
+```
+
+Send both XML and JSON messages:
+
+```
+$webhooker->notify('account-1', 'something.happened')->xml($xmlData)->json($jsonData)->send();
 ```
 
 ## Change log
@@ -29,8 +80,8 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 ## Testing
 
-``` bash
-$ composer test
+```bash
+composer test
 ```
 
 ## Contributing
