@@ -96,9 +96,9 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [ico-version]: https://img.shields.io/packagist/v/webhooker/webhooker-sdk.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/webhooker/webhooker-sdk-php/master.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/WebHooker/webhooker-sdk-php/master.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/webhooker/webhooker-sdk.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/webhooker/webhooker-sdk
-[link-travis]: https://travis-ci.org/webhooker/webhooker-sdk-php
+[link-travis]: https://travis-ci.org/WebHooker/webhooker-sdk-php
 [link-downloads]: https://packagist.org/packages/webhooker/webhooker-sdk
