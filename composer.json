@@ -18,12 +18,18 @@
         }
     ],
     "require": {
-        "php" : ">=5.4.0"
+        "php" : ">=5.4.0",
+        "psr/http-message": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit" : "4.*",
         "scrutinizer/ocular": "~1.1",
-        "squizlabs/php_codesniffer": "~2.3"
+        "squizlabs/php_codesniffer": "~2.3",
+        "guzzlehttp/guzzle": "^6.1",
+        "mockery/mockery": "^0.9.4"
+    },
+    "suggest": {
+        "guzzlehttp/guzzle": "To use as the HTTP library (^6.1)"
     },
     "autoload": {
         "psr-4": {
