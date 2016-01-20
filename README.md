@@ -63,14 +63,14 @@ $webhooker->notify('account-1', 'something.happened')->send($jsonData);
 
 Send an XML message:
 
-```
+```php
 // $xmlData must be an XML string
 $webhooker->notify('account-1', 'something.happened')->xml($xmlData)->send();
 ```
 
 Send both XML and JSON messages:
 
-```
+```php
 $webhooker->notify('account-1', 'something.happened')->xml($xmlData)->json($jsonData)->send();
 ```
 
