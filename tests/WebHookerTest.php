@@ -82,6 +82,40 @@ class WebHookerTest extends TestCase
         $this->assertFalse(property_exists($subscription, 'secret'));
     }
 
+    /** @test */
+    public function it_can_add_a_subscription_with_a_receiveJson_helper_method()
+    {
+        $http = m::mock(HttpClient::class)
+          ->shouldReceive('send')
+          ->with('POST', '/subscribers/foo/subscriptions', [
+              'tenant' => 'x',
+              'url' => 'y',
+              'format' => 'application/json',
+              'secret' => 'blah',
+          ])->andReturn($this->aSubscriptionHttpResponse())->once()->getMock();
+
+        $wh = new WebHooker($http);
+
+        $wh->subscriber('foo')->receiveJson('x', 'y', 'blah');
+    }
+
+    /** @test */
+    public function it_can_add_a_subscription_with_a_receiveXml_helper_method()
+    {
+        $http = m::mock(HttpClient::class)
+          ->shouldReceive('send')
+          ->with('POST', '/subscribers/foo/subscriptions', [
+            'tenant' => 'x',
+            'url' => 'y',
+            'format' => 'application/xml',
+            'secret' => 'blah',
+          ])->andReturn($this->aSubscriptionHttpResponse())->once()->getMock();
+
+        $wh = new WebHooker($http);
+
+        $wh->subscriber('foo')->receiveXml('x', 'y', 'blah');
+    }
+
     // TODO: receive errors
 
     /** @test */
@@ -193,6 +227,17 @@ class WebHookerTest extends TestCase
         $wh = new WebHooker($http);
 
         $wh->notify('x', 'y')->json(['foo' => 'bar'])->send(['hello' => 'world']);
+    }
+
+    private function aSubscriptionHttpResponse()
+    {
+        return new Response(200, [], json_encode([
+          'id' => 'XD',
+          'subscriber_id' => 'wij',
+          'tenant' => 'foo',
+          'format' => 'blfo',
+          'url' => 'efij',
+        ]));
     }
 
     private function aMessageHttpResponse()

@@ -35,4 +35,14 @@ class Subscriber
 
         return new Subscription($json->id, $json->subscriber_id, $json->tenant, $json->format, $json->url);
     }
+
+    public function receiveJson($tenant, $url, $secret)
+    {
+        return $this->receive($tenant, 'application/json', $url, $secret);
+    }
+
+    public function receiveXml($tenant, $url, $secret)
+    {
+        return $this->receive($tenant, 'application/xml', $url, $secret);
+    }
 }
