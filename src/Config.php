@@ -10,11 +10,12 @@ class Config
 
     /**
      * @param string|null $apiKey
+     *
      * @return $this
      */
     public static function make($apiKey = null)
     {
-        return (new self)->setApiKey($apiKey);
+        return (new self())->setApiKey($apiKey);
     }
 
     /**
@@ -27,11 +28,13 @@ class Config
 
     /**
      * @param string $domain
+     *
      * @return $this
      */
     public function setDomain($domain)
     {
         $this->domain = $domain;
+
         return $this;
     }
 
@@ -45,11 +48,13 @@ class Config
 
     /**
      * @param string $apiKey
+     *
      * @return $this
      */
     public function setApiKey($apiKey)
     {
         $this->apiKey = $apiKey;
+
         return $this;
     }
 }
