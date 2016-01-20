@@ -18,15 +18,16 @@ class WebHooker
 
     /**
      * @param $config
+     *
      * @return WebHooker
      */
     public static function usingGuzzle($config)
     {
-        if ( ! $config instanceof Config) {
+        if (!$config instanceof Config) {
             $config = Config::make($config); // passing in API Key
         }
 
-        return new self(new GuzzleHttpClient(new Client, $config));
+        return new self(new GuzzleHttpClient(new Client(), $config));
     }
 
     public function addSubscriber($name)

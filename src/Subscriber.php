@@ -28,8 +28,11 @@ class Subscriber
 
     public function receive($tenant, $format, $url, $secret)
     {
-        $response = $this->client->send('POST', '/subscribers/' . $this->id . '/subscriptions',
-          compact('tenant', 'format', 'url', 'secret'));
+        $response = $this->client->send(
+            'POST',
+            '/subscribers/'.$this->id.'/subscriptions',
+            compact('tenant', 'format', 'url', 'secret')
+        );
 
         $json = json_decode($response->getBody());
 

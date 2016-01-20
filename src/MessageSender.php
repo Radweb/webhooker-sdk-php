@@ -33,6 +33,7 @@ class MessageSender
 
     /**
      * @param mixed $body
+     *
      * @return $this
      */
     public function json($body)
@@ -44,6 +45,7 @@ class MessageSender
 
     /**
      * @param string $body
+     *
      * @return $this
      */
     public function xml($body)
@@ -55,11 +57,12 @@ class MessageSender
 
     /**
      * @param mixed $body
+     *
      * @return Message
      */
     public function send($body = null)
     {
-        if ( ! is_null($body)) {
+        if (!is_null($body)) {
             $this->json($body);
         }
 

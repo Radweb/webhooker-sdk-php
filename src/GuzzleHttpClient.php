@@ -24,14 +24,15 @@ class GuzzleHttpClient implements HttpClient
     }
 
     /**
-     * @param string $method
-     * @param string $path
+     * @param string      $method
+     * @param string      $path
      * @param string|null $body
+     *
      * @return ResponseInterface
      */
     public function send($method, $path, $body = null)
     {
-        return $this->client->request($method, $this->config->getDomain() . $path, [
+        return $this->client->request($method, $this->config->getDomain().$path, [
             'http_errors' => true,
             'body' => json_encode($body),
             'headers' => [
