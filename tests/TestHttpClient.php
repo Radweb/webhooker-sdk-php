@@ -12,6 +12,11 @@ class TestHttpClient implements HttpClient
 
     public $responses = [];
 
+    public function __construct($responseQueue = [])
+    {
+        $this->responses = $responseQueue;
+    }
+
     /**
      * @param RequestInterface $request
      * @return ResponseInterface

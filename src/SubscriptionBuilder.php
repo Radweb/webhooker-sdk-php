@@ -66,12 +66,10 @@ class SubscriptionBuilder
 
         $response = $this->client->send('POST', '/subscribers/'.$this->subscriberId.'/subscriptions', $body);
 
-        $json = json_decode($response->getBody());
-
-        $subscription = new Subscription($json->id, $json->subscriber_id, $json->tenant, $json->format, $json->url);
-        $subscription->setUsesBasicAuth($json->uses_basic_auth);
-        if ($json->legacy) {
-            $subscription->setLegacyPayload($json->legacy->payload);
+        $subscription = new Subscription($response['id'], $response['subscriber_id'], $response['tenant'], $response['format'], $response['url']);
+        $subscription->setUsesBasicAuth($response['uses_basic_auth']);
+        if ($response['legacy']) {
+            $subscription->setLegacyPayload($response['legacy']['payload']);
         }
 
         return $subscription;

@@ -34,9 +34,7 @@ class WebHooker
     {
         $response = $this->client->send('POST', '/subscribers', compact('name'));
 
-        $json = json_decode($response->getBody());
-
-        return new Subscriber($this->client, $json->id, $json->name);
+        return new Subscriber($this->client, $response['id'], $response['name']);
     }
 
     public function subscriber($id)

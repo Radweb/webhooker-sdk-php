@@ -26,7 +26,7 @@ class SubscriptionBuilderTest extends TestCase
                 'url' => $deliveryUrl,
                 'secret' => $secret,
             ])
-            ->andReturn(new Response(200, [], json_encode([
+            ->andReturn([
                 'id' => 'XD',
                 'subscriber_id' => 'wij',
                 'format' => $format,
@@ -34,7 +34,7 @@ class SubscriptionBuilderTest extends TestCase
                 'url' => $deliveryUrl,
                 'uses_basic_auth' => false,
                 'legacy' => [],
-            ])))
+            ])
             ->once()
             ->getMock();
 
@@ -65,7 +65,7 @@ class SubscriptionBuilderTest extends TestCase
                     'password' => 'qwerty',
                 ],
             ])
-            ->andReturn(new Response(200, [], json_encode([
+            ->andReturn([
                 'id' => 'XD',
                 'subscriber_id' => 'wij',
                 'format' => $format,
@@ -73,7 +73,7 @@ class SubscriptionBuilderTest extends TestCase
                 'url' => $deliveryUrl,
                 'uses_basic_auth' => true,
                 'legacy' => [],
-            ])))
+            ])
             ->once()
             ->getMock();
 
@@ -104,7 +104,7 @@ class SubscriptionBuilderTest extends TestCase
                     'payload' => 'p_reply',
                 ],
             ])
-            ->andReturn(new Response(200, [], json_encode([
+            ->andReturn([
                 'id' => 'XD',
                 'subscriber_id' => 'wij',
                 'format' => $format,
@@ -114,7 +114,7 @@ class SubscriptionBuilderTest extends TestCase
                 'legacy' => [
                     'payload' => 'p_reply',
                 ],
-            ])))
+            ])
             ->once()
             ->getMock();
 

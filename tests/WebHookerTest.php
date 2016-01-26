@@ -19,7 +19,7 @@ class WebHookerTest extends TestCase
         $api = m::mock(ApiClient::class)
           ->shouldReceive('send')
           ->with('POST', '/subscribers', ['name' => 'Sample Subscriber'])
-          ->andReturn(new Response(200, [], json_encode(['id' => 'iU4s', 'name' => 'Sample Subscriber'])))
+          ->andReturn(['id' => 'iU4s', 'name' => 'Sample Subscriber'])
           ->once()
           ->getMock();
 
@@ -62,13 +62,13 @@ class WebHookerTest extends TestCase
               'application/json' => '{"foo":["bar","baz"]}',
             ],
           ])
-          ->andReturn(new Response(200, [], json_encode([
+          ->andReturn([
             'id' => $id,
             'tenant' => $tenant,
             'type' => $type,
             'formats' => $formats,
             'recipients' => $recipientsBeingDeliveredTo,
-          ])))
+          ])
           ->once()
           ->getMock();
 
@@ -144,12 +144,12 @@ class WebHookerTest extends TestCase
 
     private function aMessageHttpResponse()
     {
-        return new Response(200, [], json_encode([
+        return [
           'id' => '348de',
           'tenant' => 'ew',
           'type' => 'enwi',
           'formats' => ['application/json'],
           'recipients' => 1,
-        ]));
+        ];
     }
 }
