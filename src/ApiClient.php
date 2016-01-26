@@ -30,10 +30,12 @@ class ApiClient
     }
 
     /**
-     * @param string $method
-     * @param string $path
+     * @param string      $method
+     * @param string      $path
      * @param string|null $body
+     *
      * @return array
+     *
      * @throws UnauthorisedRequestException
      */
     public function send($method, $path, $body = null)
@@ -53,24 +55,34 @@ class ApiClient
 
         $status = $response->getStatusCode();
 
-        if ($status < 400)
-        {
+        if ($status < 400) {
             return $body;
-        }
-        else
-        {
+        } else {
             throw $this->makeException($this->getExceptionName($status), $body);
         }
     }
 
     private function getExceptionName($status)
     {
-        if ($status == 400) return InvalidRequestException::class;
-        if ($status == 401) return UnauthorisedRequestException::class;
-        if ($status == 402) return ExpiredException::class;
-        if ($status == 404) return NotFoundException::class;
-        if ($status <= 499) return UnknownClientException::class;
-        if ($status >= 400) return UnknownServerException::class;
+        if ($status == 400) {
+            return InvalidRequestException::class;
+        }
+        if ($status == 401) {
+            return UnauthorisedRequestException::class;
+        }
+        if ($status == 402) {
+            return ExpiredException::class;
+        }
+        if ($status == 404) {
+            return NotFoundException::class;
+        }
+        if ($status <= 499) {
+            return UnknownClientException::class;
+        }
+        if ($status >= 400) {
+            return UnknownServerException::class;
+        }
+
         return Exception::class;
     }
 
@@ -82,5 +94,4 @@ class ApiClient
             return new $exceptionName();
         }
     }
-
 }

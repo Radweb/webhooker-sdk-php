@@ -66,8 +66,16 @@ class SubscriptionBuilder
 
         $response = $this->client->send('POST', '/subscribers/'.$this->subscriberId.'/subscriptions', $body);
 
-        $subscription = new Subscription($response['id'], $response['subscriber_id'], $response['tenant'], $response['format'], $response['url']);
+        $subscription = new Subscription(
+            $response['id'],
+            $response['subscriber_id'],
+            $response['tenant'],
+            $response['format'],
+            $response['url']
+        );
+
         $subscription->setUsesBasicAuth($response['uses_basic_auth']);
+
         if ($response['legacy']) {
             $subscription->setLegacyPayload($response['legacy']['payload']);
         }

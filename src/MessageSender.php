@@ -72,7 +72,13 @@ class MessageSender
           'payload' => $this->payloads,
         ]);
 
-        return new Message($response['id'], $response['tenant'], $response['type'], $response['formats'], $response['recipients']);
+        return new Message(
+            $response['id'],
+            $response['tenant'],
+            $response['type'],
+            $response['formats'],
+            $response['recipients']
+        );
     }
 
     private function toJson($body)
