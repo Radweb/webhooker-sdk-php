@@ -2,7 +2,6 @@
 
 namespace WebHooker\Test;
 
-use GuzzleHttp\Psr7\Response;
 use Mockery as m;
 use WebHooker\ApiClient;
 use WebHooker\Subscription;

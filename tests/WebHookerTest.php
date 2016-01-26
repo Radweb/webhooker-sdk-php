@@ -2,14 +2,10 @@
 
 namespace WebHooker\Test;
 
-use GuzzleHttp\Psr7\Response;
 use Mockery as m;
 use WebHooker\ApiClient;
-use WebHooker\Message;
 use WebHooker\MessageSender;
-use WebHooker\SubscriptionBuilder;
 use WebHooker\Subscriber;
-use WebHooker\Subscription;
 use WebHooker\WebHooker;
 
 class WebHookerTest extends TestCase

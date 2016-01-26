@@ -3,7 +3,6 @@
 namespace WebHooker\Test;
 
 use GuzzleHttp\Psr7\Response;
-use Mockery as m;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use WebHooker\ApiClient;
@@ -21,7 +20,7 @@ class ApiClientTest extends TestCase
     public function it_builds_request_with_config()
     {
         $http = new TestHttpClient([
-            new Response(200, [], json_encode(['lorem' => ['ipsum', 'dolor']]))
+            new Response(200, [], json_encode(['lorem' => ['ipsum', 'dolor']])),
         ]);
 
         $api = new ApiClient($http, Config::make('qwerty')->setDomain('https://foo.com'));
@@ -68,10 +67,10 @@ class ApiClientTest extends TestCase
                 'message' => 'Invalid Request',
                 'details' => $details,
             ]);
-        }
-        catch (InvalidRequestException $e) {
+        } catch (InvalidRequestException $e) {
             $this->assertEquals('Invalid Request', $e->getMessage());
             $this->assertEquals($details, $e->getDetails());
+
             return;
         }
 
@@ -83,9 +82,9 @@ class ApiClientTest extends TestCase
     {
         try {
             $this->runRequest(400);
-        }
-        catch (InvalidRequestException $e) {
+        } catch (InvalidRequestException $e) {
             $this->assertEquals('Invalid Request', $e->getMessage());
+
             return;
         }
 
@@ -127,7 +126,7 @@ class ApiClientTest extends TestCase
     private function runRequest($status, $responseBody = [])
     {
         $http = new TestHttpClient([
-            new Response($status, [], json_encode($responseBody))
+            new Response($status, [], json_encode($responseBody)),
         ]);
 
         $api = new ApiClient($http, Config::make());
