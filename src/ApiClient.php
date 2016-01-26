@@ -34,9 +34,9 @@ class ApiClient
      * @param string      $path
      * @param string|null $body
      *
-     * @return array
-     *
      * @throws UnauthorisedRequestException
+     *
+     * @return array
      */
     public function send($method, $path, $body = null)
     {
