@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Response;
 use Mockery as m;
 use WebHooker\HttpClient;
 use WebHooker\Message;
+use WebHooker\SubscriptionBuilder;
 use WebHooker\Subscriber;
 use WebHooker\Subscription;
 use WebHooker\WebHooker;
@@ -36,84 +37,13 @@ class WebHookerTest extends TestCase
     /** @test */
     public function it_returns_a_subscriber_by_id()
     {
-        $wh = new WebHooker(m::mock(HttpClient::class));
+        $http = m::mock(HttpClient::class);
+
+        $wh = new WebHooker($http);
 
         $subscriber = $wh->subscriber('Duh2');
-        $this->assertInstanceOf(Subscriber::class, $subscriber);
-        $this->assertEquals('Duh2', $subscriber->id);
-    }
 
-    /** @test */
-    public function it_can_add_a_subscription_on_a_subscriber()
-    {
-        $tenantKey = 'account-1';
-        $deliveryUrl = 'https://ffo.com/x';
-        $format = 'application/json';
-        $secretKey = 'thisisthesecretkey!!!';
-
-        $http = m::mock(HttpClient::class)
-          ->shouldReceive('send')
-          ->with('POST', '/subscribers/wij/subscriptions', [
-            'tenant' => $tenantKey,
-            'url' => $deliveryUrl,
-            'format' => $format,
-            'secret' => $secretKey,
-          ])
-          ->andReturn(new Response(200, [], json_encode([
-            'id' => 'XD',
-            'subscriber_id' => 'wij',
-            'tenant' => $tenantKey,
-            'format' => $format,
-            'url' => $deliveryUrl,
-          ])))
-          ->once()
-          ->getMock();
-
-        $wh = new WebHooker($http);
-
-        $subscription = $wh->subscriber('wij')->receive($tenantKey, $format, $deliveryUrl, $secretKey);
-
-        $this->assertInstanceOf(Subscription::class, $subscription);
-        $this->assertEquals('XD', $subscription->id);
-        $this->assertEquals('wij', $subscription->subscriberId);
-        $this->assertEquals($tenantKey, $subscription->tenant);
-        $this->assertEquals($format, $subscription->format);
-        $this->assertEquals($deliveryUrl, $subscription->url);
-        $this->assertFalse(property_exists($subscription, 'secret'));
-    }
-
-    /** @test */
-    public function it_can_add_a_subscription_with_a_receiveJson_helper_method()
-    {
-        $http = m::mock(HttpClient::class)
-          ->shouldReceive('send')
-          ->with('POST', '/subscribers/foo/subscriptions', [
-              'tenant' => 'x',
-              'url' => 'y',
-              'format' => 'application/json',
-              'secret' => 'blah',
-          ])->andReturn($this->aSubscriptionHttpResponse())->once()->getMock();
-
-        $wh = new WebHooker($http);
-
-        $wh->subscriber('foo')->receiveJson('x', 'y', 'blah');
-    }
-
-    /** @test */
-    public function it_can_add_a_subscription_with_a_receiveXml_helper_method()
-    {
-        $http = m::mock(HttpClient::class)
-          ->shouldReceive('send')
-          ->with('POST', '/subscribers/foo/subscriptions', [
-            'tenant' => 'x',
-            'url' => 'y',
-            'format' => 'application/xml',
-            'secret' => 'blah',
-          ])->andReturn($this->aSubscriptionHttpResponse())->once()->getMock();
-
-        $wh = new WebHooker($http);
-
-        $wh->subscriber('foo')->receiveXml('x', 'y', 'blah');
+        $this->assertEquals(new Subscriber($http, 'Duh2', null), $subscriber);
     }
 
     // TODO: receive errors
@@ -146,18 +76,13 @@ class WebHookerTest extends TestCase
           ->once()
           ->getMock();
 
-        $wh = new WebHooker($http);
-
-        $message = $wh->notify($tenant, $type)->send([
+        $message = (new WebHooker($http))->notify($tenant, $type)->send([
           'foo' => ['bar', 'baz'],
         ]);
 
-        $this->assertInstanceOf(Message::class, $message);
-        $this->assertEquals($id, $message->id);
-        $this->assertEquals($tenant, $message->tenant);
-        $this->assertEquals($type, $message->type);
-        $this->assertEquals($formats, $message->formats);
-        $this->assertEquals($recipientsBeingDeliveredTo, $message->recipients);
+        $expected = new Message($id, $tenant, $type, $formats, $recipientsBeingDeliveredTo);
+
+        $this->assertEquals($expected, $message);
     }
 
     /** @test */
@@ -172,9 +97,7 @@ class WebHookerTest extends TestCase
             ],
           ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
 
-        $wh = new WebHooker($http);
-
-        $wh->notify('x', 'y')->send(json_encode(['foo' => 2]));
+        (new WebHooker($http))->notify('x', 'y')->send(json_encode(['foo' => 2]));
     }
 
     /** @test */
@@ -189,9 +112,7 @@ class WebHookerTest extends TestCase
             ],
           ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
 
-        $wh = new WebHooker($http);
-
-        $wh->notify('x', 'y')->xml('<hello>world</hello>')->send();
+        (new WebHooker($http))->notify('x', 'y')->xml('<hello>world</hello>')->send();
     }
 
     /** @test */
@@ -207,9 +128,7 @@ class WebHookerTest extends TestCase
             ],
           ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
 
-        $wh = new WebHooker($http);
-
-        $wh->notify('x', 'y')->xml('<hello>world</hello>')->json(['foo' => 'bar'])->send();
+        (new WebHooker($http))->notify('x', 'y')->xml('<hello>world</hello>')->json(['foo' => 'bar'])->send();
     }
 
     /** @test */
@@ -224,20 +143,7 @@ class WebHookerTest extends TestCase
             ],
           ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
 
-        $wh = new WebHooker($http);
-
-        $wh->notify('x', 'y')->json(['foo' => 'bar'])->send(['hello' => 'world']);
-    }
-
-    private function aSubscriptionHttpResponse()
-    {
-        return new Response(200, [], json_encode([
-          'id' => 'XD',
-          'subscriber_id' => 'wij',
-          'tenant' => 'foo',
-          'format' => 'blfo',
-          'url' => 'efij',
-        ]));
+        (new WebHooker($http))->notify('x', 'y')->json(['foo' => 'bar'])->send(['hello' => 'world']);
     }
 
     private function aMessageHttpResponse()

@@ -29,6 +29,16 @@ class Subscription
      */
     public $url;
 
+    /**
+     * @var bool
+     */
+    public $usesBasicAuth = false;
+
+    /**
+     * @var string|null
+     */
+    public $legacyPayload;
+
     public function __construct($id, $subscriberId, $tenant, $format, $url)
     {
         $this->id = $id;
@@ -36,5 +46,15 @@ class Subscription
         $this->tenant = $tenant;
         $this->format = $format;
         $this->url = $url;
+    }
+
+    public function setUsesBasicAuth($usesBasicAuth)
+    {
+        $this->usesBasicAuth = (bool) $usesBasicAuth;
+    }
+
+    public function setLegacyPayload($payloadField)
+    {
+        $this->legacyPayload = $payloadField;
     }
 }

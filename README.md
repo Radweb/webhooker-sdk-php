@@ -40,8 +40,16 @@ $subscriber->id;
 Add an endpoint for the subscriber to receive messages:
 
 ```php
-// you can use "receiveJson" or "receiveXml"
-$subscription = $webhooker->subscriber($id)->receiveJson($tenantKey, $deliveryUrl, $secret);
+// you can use "jsonSubscription" or "xmlSubscription"
+$subscription = $webhooker->subscriber($id)->jsonSubscription($tenantKey, $deliveryUrl, $secret)->save();
+$subscription = $webhooker->subscriber($id)->xmlSubscription($tenantKey, $deliveryUrl, $secret)->save();
+
+// additional options for a subscription, e.g. Basic Auth, or "Legacy Payloads"
+$subscription = $webhooker->subscriber($id)
+  ->jsonSubscription($tenantKey, $deliveryUrl, $secret)
+  ->basicAuth($username, $password)
+  ->legacyMode('p_reply')
+  ->save();
 
 $subscription->id;
 ```

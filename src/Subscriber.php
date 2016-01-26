@@ -26,26 +26,13 @@ class Subscriber
         $this->name = $name;
     }
 
-    public function receive($tenant, $format, $url, $secret)
+    public function jsonSubscription($tenant, $url, $secret)
     {
-        $response = $this->client->send(
-            'POST',
-            '/subscribers/'.$this->id.'/subscriptions',
-            compact('tenant', 'format', 'url', 'secret')
-        );
-
-        $json = json_decode($response->getBody());
-
-        return new Subscription($json->id, $json->subscriber_id, $json->tenant, $json->format, $json->url);
+        return new SubscriptionBuilder($this->client, $this->id, 'application/json', $tenant, $url, $secret);
     }
 
-    public function receiveJson($tenant, $url, $secret)
+    public function xmlSubscription($tenant, $url, $secret)
     {
-        return $this->receive($tenant, 'application/json', $url, $secret);
-    }
-
-    public function receiveXml($tenant, $url, $secret)
-    {
-        return $this->receive($tenant, 'application/xml', $url, $secret);
+        return new SubscriptionBuilder($this->client, $this->id, 'application/xml', $tenant, $url, $secret);
     }
 }
