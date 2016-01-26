@@ -36,12 +36,14 @@ class SubscriptionBuilder
     public function basicAuth($username, $password)
     {
         $this->basicAuth = compact('username', 'password');
+
         return $this;
     }
 
     public function legacyPayload($payloadField)
     {
         $this->legacy['payload'] = $payloadField;
+
         return $this;
     }
 
@@ -54,13 +56,11 @@ class SubscriptionBuilder
             'secret' => $this->secret,
         ];
 
-        if ($this->basicAuth)
-        {
+        if ($this->basicAuth) {
             $body['auth'] = $this->basicAuth;
         }
 
-        if ($this->legacy)
-        {
+        if ($this->legacy) {
             $body['legacy'] = $this->legacy;
         }
 

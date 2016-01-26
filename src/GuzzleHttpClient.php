@@ -20,6 +20,7 @@ class GuzzleHttpClient implements HttpClient
 
     /**
      * @param RequestInterface $request
+     *
      * @return ResponseInterface
      */
     public function send(RequestInterface $request)
