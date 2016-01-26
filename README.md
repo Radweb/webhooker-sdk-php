@@ -48,7 +48,7 @@ $subscription = $webhooker->subscriber($id)->xmlSubscription($tenantKey, $delive
 $subscription = $webhooker->subscriber($id)
   ->jsonSubscription($tenantKey, $deliveryUrl, $secret)
   ->basicAuth($username, $password)
-  ->legacyMode('p_reply')
+  ->legacyPayload('p_reply')
   ->save();
 
 $subscription->id;
