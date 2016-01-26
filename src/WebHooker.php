@@ -7,11 +7,11 @@ use GuzzleHttp\Client;
 class WebHooker
 {
     /**
-     * @var HttpClient
+     * @var ApiClient
      */
     private $client;
 
-    public function __construct(HttpClient $client)
+    public function __construct(ApiClient $client)
     {
         $this->client = $client;
     }
@@ -27,7 +27,7 @@ class WebHooker
             $config = Config::make($config); // passing in API Key
         }
 
-        return new self(new GuzzleHttpClient(new Client(), $config));
+        return new self(new ApiClient(new GuzzleHttpClient(new Client()), $config));
     }
 
     public function addSubscriber($name)

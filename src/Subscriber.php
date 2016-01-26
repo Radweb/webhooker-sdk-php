@@ -5,7 +5,7 @@ namespace WebHooker;
 class Subscriber
 {
     /**
-     * @var HttpClient
+     * @var ApiClient
      */
     private $client;
 
@@ -19,7 +19,7 @@ class Subscriber
      */
     public $name;
 
-    public function __construct(HttpClient $client, $id, $name)
+    public function __construct(ApiClient $client, $id, $name)
     {
         $this->client = $client;
         $this->id = $id;

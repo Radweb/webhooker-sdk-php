@@ -3,6 +3,7 @@
 namespace WebHooker;
 
 use GuzzleHttp\ClientInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class GuzzleHttpClient implements HttpClient
@@ -12,33 +13,19 @@ class GuzzleHttpClient implements HttpClient
      */
     private $client;
 
-    /**
-     * @var Config
-     */
-    private $config;
-
-    public function __construct(ClientInterface $client, Config $config)
+    public function __construct(ClientInterface $client)
     {
         $this->client = $client;
-        $this->config = $config;
     }
 
     /**
-     * @param string      $method
-     * @param string      $path
-     * @param string|null $body
-     *
+     * @param RequestInterface $request
      * @return ResponseInterface
      */
-    public function send($method, $path, $body = null)
+    public function send(RequestInterface $request)
     {
-        return $this->client->request($method, $this->config->getDomain().$path, [
-            'http_errors' => true,
-            'body' => json_encode($body),
-            'headers' => [
-                'X-API-Key' => $this->config->getApiKey(),
-                'Content-Type' => 'application/json',
-            ],
+        return $this->client->send($request, [
+            'http_errors' => false,
         ]);
     }
 }

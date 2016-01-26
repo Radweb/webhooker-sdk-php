@@ -5,7 +5,7 @@ namespace WebHooker;
 class MessageSender
 {
     /**
-     * @var HttpClient
+     * @var ApiClient
      */
     private $client;
 
@@ -24,7 +24,7 @@ class MessageSender
      */
     private $payloads = [];
 
-    public function __construct(HttpClient $client, $tenant, $type)
+    public function __construct(ApiClient $client, $tenant, $type)
     {
         $this->client = $client;
         $this->tenant = $tenant;

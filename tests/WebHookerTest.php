@@ -4,7 +4,7 @@ namespace WebHooker\Test;
 
 use GuzzleHttp\Psr7\Response;
 use Mockery as m;
-use WebHooker\HttpClient;
+use WebHooker\ApiClient;
 use WebHooker\Message;
 use WebHooker\SubscriptionBuilder;
 use WebHooker\Subscriber;
@@ -16,16 +16,14 @@ class WebHookerTest extends TestCase
     /** @test */
     public function it_can_addSubscriber()
     {
-        $http = m::mock(HttpClient::class)
+        $api = m::mock(ApiClient::class)
           ->shouldReceive('send')
           ->with('POST', '/subscribers', ['name' => 'Sample Subscriber'])
           ->andReturn(new Response(200, [], json_encode(['id' => 'iU4s', 'name' => 'Sample Subscriber'])))
           ->once()
           ->getMock();
 
-        $wh = new WebHooker($http);
-
-        $subscriber = $wh->addSubscriber('Sample Subscriber');
+        $subscriber = (new WebHooker($api))->addSubscriber('Sample Subscriber');
 
         $this->assertInstanceOf(Subscriber::class, $subscriber);
         $this->assertEquals('Sample Subscriber', $subscriber->name);
@@ -37,13 +35,11 @@ class WebHookerTest extends TestCase
     /** @test */
     public function it_returns_a_subscriber_by_id()
     {
-        $http = m::mock(HttpClient::class);
+        $api = m::mock(ApiClient::class);
 
-        $wh = new WebHooker($http);
+        $subscriber = (new WebHooker($api))->subscriber('Duh2');
 
-        $subscriber = $wh->subscriber('Duh2');
-
-        $this->assertEquals(new Subscriber($http, 'Duh2', null), $subscriber);
+        $this->assertEquals(new Subscriber($api, 'Duh2', null), $subscriber);
     }
 
     // TODO: receive errors
@@ -57,7 +53,7 @@ class WebHookerTest extends TestCase
         $formats = ['application/json'];
         $recipientsBeingDeliveredTo = 4;
 
-        $http = m::mock(HttpClient::class)
+        $api = m::mock(ApiClient::class)
           ->shouldReceive('send')
           ->with('POST', '/messages', [
             'tenant' => $tenant,
@@ -76,7 +72,7 @@ class WebHookerTest extends TestCase
           ->once()
           ->getMock();
 
-        $message = (new WebHooker($http))->notify($tenant, $type)->send([
+        $message = (new WebHooker($api))->notify($tenant, $type)->send([
           'foo' => ['bar', 'baz'],
         ]);
 
@@ -88,7 +84,7 @@ class WebHookerTest extends TestCase
     /** @test */
     public function it_can_send_a_message_as_already_encoded_json()
     {
-        $http = m::mock(HttpClient::class)
+        $api = m::mock(ApiClient::class)
           ->shouldReceive('send')->with('POST', '/messages', [
             'tenant' => 'x',
             'type' => 'y',
@@ -97,13 +93,13 @@ class WebHookerTest extends TestCase
             ],
           ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
 
-        (new WebHooker($http))->notify('x', 'y')->send(json_encode(['foo' => 2]));
+        (new WebHooker($api))->notify('x', 'y')->send(json_encode(['foo' => 2]));
     }
 
     /** @test */
     public function it_can_send_xml_too()
     {
-        $http = m::mock(HttpClient::class)
+        $api = m::mock(ApiClient::class)
           ->shouldReceive('send')->with('POST', '/messages', [
             'tenant' => 'x',
             'type' => 'y',
@@ -112,13 +108,13 @@ class WebHookerTest extends TestCase
             ],
           ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
 
-        (new WebHooker($http))->notify('x', 'y')->xml('<hello>world</hello>')->send();
+        (new WebHooker($api))->notify('x', 'y')->xml('<hello>world</hello>')->send();
     }
 
     /** @test */
     public function it_can_send_json_and_xml()
     {
-        $http = m::mock(HttpClient::class)
+        $api = m::mock(ApiClient::class)
           ->shouldReceive('send')->with('POST', '/messages', [
             'tenant' => 'x',
             'type' => 'y',
@@ -128,13 +124,13 @@ class WebHookerTest extends TestCase
             ],
           ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
 
-        (new WebHooker($http))->notify('x', 'y')->xml('<hello>world</hello>')->json(['foo' => 'bar'])->send();
+        (new WebHooker($api))->notify('x', 'y')->xml('<hello>world</hello>')->json(['foo' => 'bar'])->send();
     }
 
     /** @test */
     public function it_adding_json_twice_prefers_the_latest_one()
     {
-        $http = m::mock(HttpClient::class)
+        $api = m::mock(ApiClient::class)
           ->shouldReceive('send')->with('POST', '/messages', [
             'tenant' => 'x',
             'type' => 'y',
@@ -143,7 +139,7 @@ class WebHookerTest extends TestCase
             ],
           ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
 
-        (new WebHooker($http))->notify('x', 'y')->json(['foo' => 'bar'])->send(['hello' => 'world']);
+        (new WebHooker($api))->notify('x', 'y')->json(['foo' => 'bar'])->send(['hello' => 'world']);
     }
 
     private function aMessageHttpResponse()

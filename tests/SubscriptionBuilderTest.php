@@ -4,7 +4,7 @@ namespace WebHooker\Test;
 
 use GuzzleHttp\Psr7\Response;
 use Mockery as m;
-use WebHooker\HttpClient;
+use WebHooker\ApiClient;
 use WebHooker\Subscription;
 use WebHooker\SubscriptionBuilder;
 
@@ -18,7 +18,7 @@ class SubscriptionBuilderTest extends TestCase
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
 
-        $http = m::mock(HttpClient::class)
+        $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
             ->with('POST', '/subscribers/wij/subscriptions', [
                 'format' => $format,
@@ -38,7 +38,7 @@ class SubscriptionBuilderTest extends TestCase
             ->once()
             ->getMock();
 
-        $subscription = (new SubscriptionBuilder($http, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->save();
+        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->save();
 
         $expected = new Subscription('XD', 'wij', $tenantKey, $format, $deliveryUrl);
 
@@ -53,7 +53,7 @@ class SubscriptionBuilderTest extends TestCase
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
 
-        $http = m::mock(HttpClient::class)
+        $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
             ->with('POST', '/subscribers/wij/subscriptions', [
                 'format' => $format,
@@ -77,7 +77,7 @@ class SubscriptionBuilderTest extends TestCase
             ->once()
             ->getMock();
 
-        $subscription = (new SubscriptionBuilder($http, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->basicAuth('bob', 'qwerty')->save();
+        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->basicAuth('bob', 'qwerty')->save();
 
         $expected = new Subscription('XD', 'wij', $tenantKey, $format, $deliveryUrl);
         $expected->setUsesBasicAuth(true);
@@ -93,7 +93,7 @@ class SubscriptionBuilderTest extends TestCase
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
 
-        $http = m::mock(HttpClient::class)
+        $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
             ->with('POST', '/subscribers/wij/subscriptions', [
                 'format' => $format,
@@ -118,7 +118,7 @@ class SubscriptionBuilderTest extends TestCase
             ->once()
             ->getMock();
 
-        $subscription = (new SubscriptionBuilder($http, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->legacyPayload('p_reply')->save();
+        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->legacyPayload('p_reply')->save();
 
         $expected = new Subscription('XD', 'wij', $tenantKey, $format, $deliveryUrl);
         $expected->setLegacyPayload('p_reply');

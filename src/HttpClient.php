@@ -2,16 +2,14 @@
 
 namespace WebHooker;
 
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 interface HttpClient
 {
     /**
-     * @param string      $method
-     * @param string      $path
-     * @param string|null $body
-     *
+     * @param RequestInterface $request
      * @return ResponseInterface
      */
-    public function send($method, $path, $body = null);
+    public function send(RequestInterface $request);
 }

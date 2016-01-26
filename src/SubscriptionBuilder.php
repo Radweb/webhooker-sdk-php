@@ -5,7 +5,7 @@ namespace WebHooker;
 class SubscriptionBuilder
 {
     /**
-     * @var HttpClient
+     * @var ApiClient
      */
     private $client;
 
@@ -23,7 +23,7 @@ class SubscriptionBuilder
 
     private $legacy = [];
 
-    public function __construct(HttpClient $client, $subscriberId, $format, $tenant, $url, $secret)
+    public function __construct(ApiClient $client, $subscriberId, $format, $tenant, $url, $secret)
     {
         $this->client = $client;
         $this->subscriberId = $subscriberId;
