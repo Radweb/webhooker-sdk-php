@@ -28,4 +28,14 @@ class SubscriberTest extends TestCase
 
         $this->assertEquals(new SubscriptionBuilder($api, 'foo', 'application/xml', 'a', 'b', 'c'), $builder);
     }
+
+    /** @test */
+    public function it_can_pass_through_own_format()
+    {
+        $api = m::mock(ApiClient::class);
+
+        $builder = (new Subscriber($api, 'foo', 'Blah'))->subscription('application/format', '1', '2', '3');
+
+        $this->assertEquals(new SubscriptionBuilder($api, 'foo', 'application/format', '1', '2', '3'), $builder);
+    }
 }
