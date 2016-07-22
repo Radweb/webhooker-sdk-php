@@ -16,7 +16,7 @@ class SubscriptionBuilderTest extends TestCase
         $tenantKey = 'account-1';
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
-        $type = 'inspection.completed';
+        $events = 'inspection.completed';
 
         $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
@@ -25,7 +25,7 @@ class SubscriptionBuilderTest extends TestCase
                 'tenant' => $tenantKey,
                 'url' => $deliveryUrl,
                 'secret' => $secret,
-                'eventType' => $type,
+                'events' => $events,
             ])
             ->andReturn([
                 'id' => 'XD',
@@ -39,7 +39,7 @@ class SubscriptionBuilderTest extends TestCase
             ->once()
             ->getMock();
 
-        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->save();
+        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret, $events))->save();
 
         $expected = new Subscription('XD', 'wij', $tenantKey, $format, $deliveryUrl);
 
@@ -53,6 +53,7 @@ class SubscriptionBuilderTest extends TestCase
         $tenantKey = 'account-1';
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
+        $events = 'inspection.completed';
 
         $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
@@ -61,6 +62,7 @@ class SubscriptionBuilderTest extends TestCase
                 'tenant' => $tenantKey,
                 'url' => $deliveryUrl,
                 'secret' => $secret,
+                'events' => $events,
                 'auth' => [
                     'username' => 'bob',
                     'password' => 'qwerty',
@@ -78,7 +80,7 @@ class SubscriptionBuilderTest extends TestCase
             ->once()
             ->getMock();
 
-        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->basicAuth('bob', 'qwerty')->save();
+        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret, $events))->basicAuth('bob', 'qwerty')->save();
 
         $expected = new Subscription('XD', 'wij', $tenantKey, $format, $deliveryUrl);
         $expected->setUsesBasicAuth(true);
@@ -93,6 +95,7 @@ class SubscriptionBuilderTest extends TestCase
         $tenantKey = 'account-1';
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
+        $events = 'inspection.completed';
 
         $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
@@ -101,6 +104,7 @@ class SubscriptionBuilderTest extends TestCase
                 'tenant' => $tenantKey,
                 'url' => $deliveryUrl,
                 'secret' => $secret,
+                'events' => $events,
                 'legacy' => [
                     'payload' => 'p_reply',
                 ],
@@ -119,7 +123,7 @@ class SubscriptionBuilderTest extends TestCase
             ->once()
             ->getMock();
 
-        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->legacyPayload('p_reply')->save();
+        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret, $events))->legacyPayload('p_reply')->save();
 
         $expected = new Subscription('XD', 'wij', $tenantKey, $format, $deliveryUrl);
         $expected->setLegacyPayload('p_reply');
