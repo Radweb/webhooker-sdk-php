@@ -36,8 +36,8 @@ class Subscriber
         return $this->subscription('application/xml', $tenant, $url, $secret);
     }
 
-    public function subscription($format, $tenant, $url, $secret)
+    public function subscription($format, $tenant, $url, $secret, $eventType = null)
     {
-        return new SubscriptionBuilder($this->client, $this->id, $format, $tenant, $url, $secret);
+        return new SubscriptionBuilder($this->client, $this->id, $format, $tenant, $url, $secret, $eventType);
     }
 }

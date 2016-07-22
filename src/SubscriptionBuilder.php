@@ -23,7 +23,9 @@ class SubscriptionBuilder
 
     private $legacy = [];
 
-    public function __construct(ApiClient $client, $subscriberId, $format, $tenant, $url, $secret)
+    private $eventType;
+
+    public function __construct(ApiClient $client, $subscriberId, $format, $tenant, $url, $secret, $eventType = null)
     {
         $this->client = $client;
         $this->subscriberId = $subscriberId;
@@ -31,6 +33,7 @@ class SubscriptionBuilder
         $this->tenant = $tenant;
         $this->url = $url;
         $this->secret = $secret;
+        $this->eventType = $eventType;
     }
 
     public function basicAuth($username, $password)
@@ -54,6 +57,7 @@ class SubscriptionBuilder
             'tenant' => $this->tenant,
             'url' => $this->url,
             'secret' => $this->secret,
+            'eventType' => $this->eventType,
         ];
 
         if ($this->basicAuth) {
