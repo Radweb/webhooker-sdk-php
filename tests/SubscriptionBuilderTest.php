@@ -16,6 +16,7 @@ class SubscriptionBuilderTest extends TestCase
         $tenantKey = 'account-1';
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
+        $type = 'inspection.completed';
 
         $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
@@ -24,6 +25,7 @@ class SubscriptionBuilderTest extends TestCase
                 'tenant' => $tenantKey,
                 'url' => $deliveryUrl,
                 'secret' => $secret,
+                'eventType' => $type,
             ])
             ->andReturn([
                 'id' => 'XD',
