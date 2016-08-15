@@ -23,9 +23,9 @@ class SubscriptionBuilder
 
     private $legacy = [];
 
-    private $events;
+    private $events = [];
 
-    public function __construct(ApiClient $client, $subscriberId, $format, $tenant, $url, $secret, $events = null)
+    public function __construct(ApiClient $client, $subscriberId, $format, $tenant, $url, $secret, $events = [])
     {
         $this->client = $client;
         $this->subscriberId = $subscriberId;
