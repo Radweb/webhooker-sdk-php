@@ -25,7 +25,7 @@ class SubscriptionBuilder
 
     private $events = [];
 
-    public function __construct(ApiClient $client, $subscriberId, $format, $tenant, $url, $secret, $events = [])
+    public function __construct(ApiClient $client, $subscriberId, $format, $tenant, $url, $secret)
     {
         $this->client = $client;
         $this->subscriberId = $subscriberId;
@@ -33,7 +33,6 @@ class SubscriptionBuilder
         $this->tenant = $tenant;
         $this->url = $url;
         $this->secret = $secret;
-        $this->events = $events;
     }
 
     public function basicAuth($username, $password)
@@ -46,6 +45,13 @@ class SubscriptionBuilder
     public function legacyPayload($payloadField)
     {
         $this->legacy['payload'] = $payloadField;
+
+        return $this;
+    }
+
+    public function onlyEvents($events)
+    {
+        $this->events = $events;
 
         return $this;
     }
