@@ -16,7 +16,7 @@ class SubscriptionBuilderTest extends TestCase
         $tenantKey = 'account-1';
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
-        $events = 'inspection.completed';
+        $events = [];
 
         $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
@@ -39,7 +39,7 @@ class SubscriptionBuilderTest extends TestCase
             ->once()
             ->getMock();
 
-        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret, $events))->save();
+        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->save();
 
         $expected = new Subscription('XD', 'wij', $tenantKey, $format, $deliveryUrl);
 
@@ -53,7 +53,7 @@ class SubscriptionBuilderTest extends TestCase
         $tenantKey = 'account-1';
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
-        $events = 'inspection.completed';
+        $events = [];
 
         $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
@@ -80,7 +80,7 @@ class SubscriptionBuilderTest extends TestCase
             ->once()
             ->getMock();
 
-        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret, $events))->basicAuth('bob', 'qwerty')->save();
+        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->basicAuth('bob', 'qwerty')->save();
 
         $expected = new Subscription('XD', 'wij', $tenantKey, $format, $deliveryUrl);
         $expected->setUsesBasicAuth(true);
@@ -95,7 +95,7 @@ class SubscriptionBuilderTest extends TestCase
         $tenantKey = 'account-1';
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
-        $events = 'inspection.completed';
+        $events = [];
 
         $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
@@ -123,7 +123,7 @@ class SubscriptionBuilderTest extends TestCase
             ->once()
             ->getMock();
 
-        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret, $events))->legacyPayload('p_reply')->save();
+        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->legacyPayload('p_reply')->save();
 
         $expected = new Subscription('XD', 'wij', $tenantKey, $format, $deliveryUrl);
         $expected->setLegacyPayload('p_reply');
