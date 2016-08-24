@@ -41,7 +41,7 @@ class Subscriber
         return new SubscriptionBuilder($this->client, $this->id, $format, $tenant, $url, $secret);
     }
 
-    public function unsubscribe($tenant, $events = null)
+    public function unsubscribe($tenant, $events = [])
     {
         return new UnsubscribeBuilder($this->client, $this->id, $tenant, $events);
     }
