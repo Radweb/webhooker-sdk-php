@@ -16,6 +16,7 @@ class SubscriptionBuilderTest extends TestCase
         $tenantKey = 'account-1';
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
+        $events = [];
 
         $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
@@ -24,6 +25,7 @@ class SubscriptionBuilderTest extends TestCase
                 'tenant' => $tenantKey,
                 'url' => $deliveryUrl,
                 'secret' => $secret,
+                'events' => $events,
             ])
             ->andReturn([
                 'id' => 'XD',
@@ -51,6 +53,7 @@ class SubscriptionBuilderTest extends TestCase
         $tenantKey = 'account-1';
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
+        $events = [];
 
         $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
@@ -59,6 +62,7 @@ class SubscriptionBuilderTest extends TestCase
                 'tenant' => $tenantKey,
                 'url' => $deliveryUrl,
                 'secret' => $secret,
+                'events' => $events,
                 'auth' => [
                     'username' => 'bob',
                     'password' => 'qwerty',
@@ -91,6 +95,7 @@ class SubscriptionBuilderTest extends TestCase
         $tenantKey = 'account-1';
         $deliveryUrl = 'https://ffo.com/x';
         $secret = 'blahblah';
+        $events = [];
 
         $api = m::mock(ApiClient::class)
             ->shouldReceive('send')
@@ -99,6 +104,7 @@ class SubscriptionBuilderTest extends TestCase
                 'tenant' => $tenantKey,
                 'url' => $deliveryUrl,
                 'secret' => $secret,
+                'events' => $events,
                 'legacy' => [
                     'payload' => 'p_reply',
                 ],
@@ -121,6 +127,43 @@ class SubscriptionBuilderTest extends TestCase
 
         $expected = new Subscription('XD', 'wij', $tenantKey, $format, $deliveryUrl);
         $expected->setLegacyPayload('p_reply');
+
+        $this->assertEquals($expected, $subscription);
+    }
+
+    /** @test */
+    public function it_can_be_configured_with_events()
+    {
+        $format = 'application/blah';
+        $tenantKey = 'account-1';
+        $deliveryUrl = 'https://ffo.com/x';
+        $secret = 'blahblah';
+        $events = ['inspection.completed'];
+
+        $api = m::mock(ApiClient::class)
+            ->shouldReceive('send')
+            ->with('POST', '/subscribers/wij/subscriptions', [
+                'format' => $format,
+                'tenant' => $tenantKey,
+                'url' => $deliveryUrl,
+                'secret' => $secret,
+                'events' => $events
+            ])
+            ->andReturn([
+                'id' => 'XD',
+                'subscriber_id' => 'wij',
+                'format' => $format,
+                'tenant' => $tenantKey,
+                'url' => $deliveryUrl,
+                'uses_basic_auth' => false,
+	            'legacy' => []
+            ])
+            ->once()
+            ->getMock();
+
+        $subscription = (new SubscriptionBuilder($api, 'wij', $format, $tenantKey, $deliveryUrl, $secret))->onlyEvents($events)->save();
+
+        $expected = new Subscription('XD', 'wij', $tenantKey, $format, $deliveryUrl);
 
         $this->assertEquals($expected, $subscription);
     }
