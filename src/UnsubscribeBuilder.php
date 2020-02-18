@@ -23,6 +23,11 @@ class UnsubscribeBuilder
         $this->events = $events;
     }
 
+    public function delete($subscriptionId)
+    {
+        return $this->client->send('DELETE', '/subscribers/'.$this->subscriberId.'/subscriptions/' . $subscriptionId);
+    }
+
     public function save()
     {
         $body = [
