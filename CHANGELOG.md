@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0](https://github.com/WebHooker/webhooker-sdk-php/releases/tag/0.3.0)
+
 ### Added 
 
 - `UnsubscribeBuilder::delete()` method to delete subscriptions.
