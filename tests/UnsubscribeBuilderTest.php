@@ -30,4 +30,23 @@ class UnsubscribeBuilderTest extends TestCase
 
 		$this->assertThat($response, $this->isNull());
 	}
+
+	/** @test */
+	public function it_can_delete_a_subscription()
+    {
+        $subscriberId = 'foo';
+        $subscriptionId = 'bar';
+        $tenantKey = 'account-1';
+        $events = ['inspection.completed'];
+
+        $api = m::mock(ApiClient::class)
+            ->shouldReceive('send')
+            ->with('DELETE', '/subscribers/'.$subscriberId.'/subscriptions/'.$subscriptionId)
+            ->once()
+            ->getMock();
+
+        $response = (new UnsubscribeBuilder($api, $subscriberId, $tenantKey, $events))->delete($subscriptionId);
+
+        $this->assertThat($response, $this->isNull());
+    }
 }
