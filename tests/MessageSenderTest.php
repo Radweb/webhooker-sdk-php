@@ -49,14 +49,17 @@ class MessageSenderTest extends TestCase
     /** @test */
     public function it_can_send_a_message_as_already_encoded_json()
     {
-        $api = m::mock(ApiClient::class)
-            ->shouldReceive('send')->with('POST', '/messages', [
+        $api = $this->createMock(ApiClient::class);
+        $api->expects($this->once())
+            ->method('send')
+            ->with('POST', '/messages', [
                 'tenant' => 'x',
                 'type' => 'y',
                 'payload' => [
                     'application/json' => '{"foo":2}',
                 ],
-            ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
+            ])
+            ->willReturn($this->aMessageHttpResponse());
 
         (new MessageSender($api, 'x', 'y'))->send(json_encode(['foo' => 2]));
     }
@@ -64,14 +67,18 @@ class MessageSenderTest extends TestCase
     /** @test */
     public function it_can_send_xml_too()
     {
-        $api = m::mock(ApiClient::class)
-            ->shouldReceive('send')->with('POST', '/messages', [
+        $api = $this->createMock(ApiClient::class);
+
+        $api->expects($this->once())
+            ->method('send')
+            ->with('POST', '/messages', [
                 'tenant' => 'x',
                 'type' => 'y',
                 'payload' => [
                     'application/xml' => '<hello>world</hello>',
                 ],
-            ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
+            ])
+            ->willReturn($this->aMessageHttpResponse());
 
         (new MessageSender($api, 'x', 'y'))->xml('<hello>world</hello>')->send();
     }
@@ -79,15 +86,19 @@ class MessageSenderTest extends TestCase
     /** @test */
     public function it_can_send_json_and_xml()
     {
-        $api = m::mock(ApiClient::class)
-            ->shouldReceive('send')->with('POST', '/messages', [
+        $api = $this->createMock(ApiClient::class);
+
+        $api->expects($this->once())
+            ->method('send')
+            ->with('POST', '/messages', [
                 'tenant' => 'x',
                 'type' => 'y',
                 'payload' => [
                     'application/xml' => '<hello>world</hello>',
                     'application/json' => '{"foo":"bar"}',
                 ],
-            ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
+            ])
+            ->willReturn($this->aMessageHttpResponse());
 
         (new MessageSender($api, 'x', 'y'))->xml('<hello>world</hello>')->json(['foo' => 'bar'])->send();
     }
@@ -95,14 +106,18 @@ class MessageSenderTest extends TestCase
     /** @test */
     public function it_adding_json_twice_prefers_the_latest_one()
     {
-        $api = m::mock(ApiClient::class)
-            ->shouldReceive('send')->with('POST', '/messages', [
+        $api = $this->createMock(ApiClient::class);
+
+        $api->expects($this->once())
+            ->method('send')
+            ->with('POST', '/messages', [
                 'tenant' => 'x',
                 'type' => 'y',
                 'payload' => [
                     'application/json' => '{"hello":"world"}',
                 ],
-            ])->andReturn($this->aMessageHttpResponse())->once()->getMock();
+            ])
+            ->willReturn($this->aMessageHttpResponse());
 
         (new MessageSender($api, 'x', 'y'))->json(['foo' => 'bar'])->send(['hello' => 'world']);
     }

@@ -4,9 +4,9 @@ namespace WebHooker\Test;
 
 use Mockery as m;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
-    protected function tearDown()
+    protected function tearDown():void
     {
         m::close();
     }
