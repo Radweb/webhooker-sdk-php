@@ -50,7 +50,7 @@ class ApiClientTest extends TestCase
     /** @test */
     public function it_throws_on_401()
     {
-        $this->setExpectedException(UnauthorisedRequestException::class);
+        $this->expectException(UnauthorisedRequestException::class);
 
         $this->runRequest(401);
     }
@@ -94,7 +94,7 @@ class ApiClientTest extends TestCase
     /** @test */
     public function it_throws_on_402_team_expired()
     {
-        $this->setExpectedException(ExpiredException::class);
+        $this->expectException(ExpiredException::class);
 
         $this->runRequest(402);
     }
@@ -102,7 +102,7 @@ class ApiClientTest extends TestCase
     /** @test */
     public function it_throws_on_404()
     {
-        $this->setExpectedException(NotFoundException::class);
+        $this->expectException(NotFoundException::class);
 
         $this->runRequest(404);
     }
@@ -110,7 +110,7 @@ class ApiClientTest extends TestCase
     /** @test */
     public function it_throws_on_other_4XX_eg_419()
     {
-        $this->setExpectedException(UnknownClientException::class);
+        $this->expectException(UnknownClientException::class);
 
         $this->runRequest(419);
     }
@@ -118,7 +118,7 @@ class ApiClientTest extends TestCase
     /** @test */
     public function it_throws_on_5XX()
     {
-        $this->setExpectedException(UnknownServerException::class);
+        $this->expectException(UnknownServerException::class);
 
         $this->runRequest(500);
     }
